@@ -1,0 +1,152 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard">
+    <section class="section-clients mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="section-title">Nos Clients</h2>
+            <a href="{% url 'nouveau_client' %}" class="btn btn-primary">
+                <i class="fas fa-user-plus"></i> Nouveau Client
+            </a>
+        </div>
+        
+        <div class="row g-4">
+            {% for client in clients %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card client-card h-100 shadow-sm">
+                    <div class="card-img-wrapper">
+                        {% if client.image %}
+                            <img src="{{ client.image.url }}" class="card-img-top" alt="{{ client.name }}">
+                        {% else %}
+                            <img src="{% static 'images/default-user.png' %}" class="card-img-top" alt="Default">
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ client.name }}</h5>
+                        <p class="card-text text-muted">
+                            <i class="fas fa-envelope"></i> {{ client.email }}
+                            <br>
+                            <i class="fas fa-phone"></i> {{ client.phone }}
+                        </p>
+                        <a href="{% url 'client_detail' pk=client.pk %}" class="btn btn-outline-primary stretched-link">
+                            Voir détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="section-equipements">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="section-title">Notre Matériel</h2>
+            <a href="{% url 'nouveau_equipement' %}" class="btn btn-primary">
+                <i class="fas fa-plus-circle"></i> Nouvel Équipement
+            </a>
+        </div>
+        
+        <div class="row g-4">
+            {% for item in equipements %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card equipement-card h-100 shadow-sm">
+                    <div class="card-img-wrapper">
+                        <img src="{% if item.image %}{{ item.image.url }}{% else %}{% static 'images/default-equipment.png' %}{% endif %}" 
+                             class="card-img-top" alt="{{ item.name }}">
+                        <div class="status-badge status-{{ item.state }}">
+                            {{ item.state }}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                        <p class="card-text">
+                            <span class="badge bg-info">{{ item.category }}</span>
+                        </p>
+                        <a href="{% url 'equipement_detail' pk=item.pk %}" class="btn btn-outline-primary stretched-link">
+                            Voir détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<style>
+.dashboard {
+    padding: 2rem 0;
+}
+
+.section-title {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.card {
+    transition: transform 0.2s ease;
+    border: none;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-img-wrapper {
+    position: relative;
+    padding-top: 66.67%;
+    overflow: hidden;
+}
+
+.card-img-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.status-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.status-disponible {
+    background-color: #28a745;
+    color: white;
+}
+
+.status-occupé {
+    background-color: #dc3545;
+    color: white;
+}
+
+.status-endommagé {
+    background-color: #ffc107;
+    color: black;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.btn-outline-primary {
+    border-width: 2px;
+}
+
+.card-text {
+    color: #6c757d;
+}
+</style>
+{% endblock %}
+

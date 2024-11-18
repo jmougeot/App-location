@@ -1,0 +1,126 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="client-detail">
+    <h1>Nouveau Client </h1>
+
+    <div class="edit-section">
+        <h2>Ajouter les informations nécessaires</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Enregistrer</button>
+            <a href="{% url 'client_management' %}">Retour</a>
+        </form>
+    </div>
+</div>
+
+<style>
+.client-detail {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.client-detail h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+}
+
+.client-image {
+    display: block;
+    max-width: 200px;
+    margin: 0 auto 30px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.info-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.info-section h2 {
+    color: #3498db;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.info-section p {
+    margin: 10px 0;
+    color: #555;
+    font-size: 1.1em;
+}
+
+.edit-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.edit-section h2 {
+    color: #3498db;
+    margin-bottom: 20px;
+}
+
+form p {
+    margin: 15px 0;
+}
+
+form input, form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+button[type="submit"] {
+    background: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background 0.3s;
+}
+
+button[type="submit"]:hover {
+    background: #2980b9;
+}
+
+a {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #95a5a6;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+a:hover {
+    background: #7f8c8d;
+}
+
+@media (max-width: 600px) {
+    .client-detail {
+        margin: 10px;
+        padding: 15px;
+    }
+    
+    .client-image {
+        max-width: 150px;
+    }
+}
+</style>
+{% endblock %}

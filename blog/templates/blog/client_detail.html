@@ -1,0 +1,147 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="client-detail">
+    <header class="client-header">
+        <h1>{{ client.name }}</h1>
+        {% if client.image %}
+            <img src="{{ client.image.url }}" alt="Photo de {{ client.name }}" class="client-image">
+        {% endif %}
+    </header>
+
+    <section class="client-info">
+        <div class="info-card">
+            <h2>Informations du client</h2>
+            <p><i class="fas fa-envelope"></i> {{ client.email }}</p>
+            <p><i class="fas fa-phone"></i> {{ client.phone }}</p>
+            <p><i class="fas fa-map-marker-alt"></i> {{ client.adresse }}</p>
+        </div>
+    </section>
+
+    <section class="client-info">
+        <h2>Équipements empruntés</h2>
+        {% if emprunts_actifs %}
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Équipement</th>
+                            <th>Date d'emprunt</th>
+                            <th>Date de retour prévue</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for emprunt in emprunts_actifs %}
+                        <tr>
+                            <td>{{ emprunt.equipement.name }}</td>
+                            <td>{{ emprunt.date_emprunt|date:"d/m/Y" }}</td>
+                            <td>{{ emprunt.date_retour_prevue|date:"d/m/Y" }}</td>
+                            <td>
+                                <form method="POST" action="{% url 'retourner_equipement' pk=emprunt.equipement.pk %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-undo"></i> Retourner
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted">Aucun équipement emprunté actuellement.</p>
+        {% endif %}
+    </section>
+
+    <section class="client-info">
+        <h2>Emprunter un équipement</h2>
+        {% if equipements_disponibles %}
+        <form method="POST" class="emprunt-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="equipement">Sélectionner un équipement :</label>
+                <select name="equipement" id="equipement" class="form-control">
+                    <option value="">---------</option>
+                    {% for equipement in equipements_disponibles %}
+                        <option value="{{ equipement.pk }}">{{ equipement.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Emprunter</button>
+        </form>
+        {% else %}
+            <p class="text-muted">Aucun équipement disponible pour l'emprunt.</p>
+        {% endif %}
+    </section>
+
+    <section class="equipements-empruntes">
+        <h2>Modifier les informations</h2>
+        <form method="POST" enctype="multipart/form-data" class="edit-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                <a href="{% url 'client_management' %}" class="btn btn-secondary">Retour</a>
+            </div>
+        </form>
+    </section>
+</div>
+
+<style>
+    .client-detail {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 20px;
+    }
+
+    .client-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .client-image {
+        max-width: 200px;
+        border-radius: 50%;
+        margin: 1rem 0;
+    }
+
+    .info-card {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 2rem;
+    }
+
+    .equipements-empruntes {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .table {
+        margin-top: 1rem;
+    }
+
+    .btn-warning {
+        color: #000;
+        background-color: #ffc107;
+        border-color: #ffc107;
+    }
+
+    .btn-warning:hover {
+        background-color: #ffca2c;
+        border-color: #ffc720;
+    }
+
+    .emprunt-form {
+        margin-top: 1rem;
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 5px;
+    }
+</style>
+{% endblock %}

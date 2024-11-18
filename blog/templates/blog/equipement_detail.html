@@ -1,0 +1,122 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="equipement-detail">
+    <h1>{{ equipement.name }}</h1>
+    
+    <div class="equipement-info">
+        {% if equipement.image %}
+            <img src="{{ equipement.image.url }}" alt="{{ equipement.name }}" class="equipement-image">
+        {% endif %}
+        
+        <div class="info-section">
+            <p>État : {{ equipement.state }}</p>
+            <p>Catégorie : {{ equipement.category }}</p>
+            
+            <form method="POST" action="{% url 'supprimer_equipement' pk=equipement.pk %}" class="delete-form">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet équipement ?')">
+                    Supprimer l'équipement
+                </button>
+
+            </form>
+            
+            {% if equipement.state == 'occupé' and emprunt_actif %}
+                <div class="emprunt-actif">
+                    <h3>Actuellement emprunté par :</h3>
+                    <p>{{ emprunt_actif.client.name }}</p>
+                    <p>Date d'emprunt : {{ emprunt_actif.date_emprunt }}</p>
+                    <p>Retour prévu : {{ emprunt_actif.date_retour_prevue }}</p>
+                    
+                    <form method="POST" action="{% url 'retourner_equipement' pk=equipement.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-warning">Retourner l'équipement</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="nouvel-emprunt">
+                    <h3>Prêter l'équipement</h3>
+                    <form method="POST" action="{% url 'emprunter_equipement' pk=equipement.pk %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="client">Client :</label>
+                            <select name="client" id="client" class="form-control" required>
+                                <option value="">Sélectionner un client</option>
+                                {% for client in clients %}
+                                    <option value="{{ client.pk }}">{{ client.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="date_retour">Date de retour prévue :</label>
+                            <input type="date" name="date_retour" id="date_retour" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Prêter</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .equipement-detail {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 20px;
+    }
+    
+    .equipement-image {
+        max-width: 400px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+    
+    .info-section {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 5px;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        border: none;
+    }
+    
+    .btn-warning {
+        background-color: #ffc107;
+        color: black;
+        border: none;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        margin-top: 10px;
+    }
+
+    .delete-form {
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}

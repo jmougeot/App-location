@@ -1,0 +1,72 @@
+{% extends 'blog/base.html' %}
+{% load blog/static %}
+
+{% block content %}
+<div class="nouveau-equipement">
+    <h1>Ajouter un nouvel équipement</h1>
+    
+    <form method="POST" enctype="multipart/form-data" class="equipement-form">
+        {% csrf_token %}
+        
+        <div class="form-fields">
+            {{ form.as_p }}
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Enregistrer
+            </button>
+            <a href="{% url 'client_management' %}" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Annuler
+            </a>
+        </div>
+    </form>
+</div>
+
+<style>
+    .nouveau-equipement {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 20px;
+    }
+
+    .equipement-form {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .form-fields {
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: white;
+    }
+
+    .form-actions {
+        margin-top: 20px;
+        text-align: right;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        margin-left: 10px;
+    }
+</style>
+{% endblock %}
