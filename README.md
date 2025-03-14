@@ -1,6 +1,8 @@
 # App-location
 
-Projet MI2 sur la création d'une application de location de materiels sportif.
+Projet MI2 sur la création d'une application de location de materiels sportif. 
+
+Utilisation du framework Django
 
 ## Installation de l'application
 
