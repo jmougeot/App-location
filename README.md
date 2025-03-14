@@ -1,6 +1,6 @@
 # App-location
 
-Projet MI2 sur une application de location de sport.
+Projet MI2 sur la création d'une application de location de materiels sportif.
 
 ## Installation de l'application
 
